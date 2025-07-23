@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
+//Nícolas Bastos
+
 namespace Academia_do_Zé
 {
     abstract class Pessoa
@@ -18,9 +20,7 @@ namespace Academia_do_Zé
             get => _cpf;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("CPF não pode ser nulo.");
-                _cpf = value;
+                
             }
         }
 
@@ -30,11 +30,7 @@ namespace Academia_do_Zé
             set
             {
                 
-                if (value > DateOnly.FromDateTime(DateTime.Today))
-                    throw new ArgumentException("Data de nascimento não pode ser no futuro.");
-                if (value < DateOnly.FromDateTime(new DateTime(1900, 1, 1)))
-                    throw new ArgumentException("Data de nascimento muito antiga.");
-                _dataNascimento = value;
+               
             }
         }
 
@@ -43,9 +39,7 @@ namespace Academia_do_Zé
             get => _nomeCompleto;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Nome completo não pode ser vazio.");
-                _nomeCompleto = value;
+               
             }
         }
 
@@ -54,9 +48,7 @@ namespace Academia_do_Zé
             get => _telefone;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Telefone inválido.");
-                _telefone = value;
+              
             }
         }
 
@@ -65,9 +57,7 @@ namespace Academia_do_Zé
             get => _email;
             set
             {
-                if (string.IsNullOrWhiteSpace(value) || !Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                    throw new ArgumentException("Email inválido.");
-                _email = value;
+                ;
             }
         }
 
@@ -76,16 +66,14 @@ namespace Academia_do_Zé
             get => _senha;
             set
             {
-                if (string.IsNullOrWhiteSpace(value) || value.Length < 6)
-                    throw new ArgumentException("Senha deve ter pelo menos 6 caracteres.");
-                _senha = value;
+                
             }
         }
 
         public string Foto
         {
             get => _foto;
-            set => _foto = value; // Adicione validação se necessário
+            set => _foto = value; 
         }
 
         
