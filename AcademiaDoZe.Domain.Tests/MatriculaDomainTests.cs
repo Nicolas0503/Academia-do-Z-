@@ -5,6 +5,8 @@ using Academia_do_Zé.Exceptions;
 using Academia_do_Zé.ValueObjects;
 using Xunit;
 
+//Nícolas Bastos
+
 namespace AcademiaDoZe.Domain.Tests
 {
     public class MatriculaDomainTests
