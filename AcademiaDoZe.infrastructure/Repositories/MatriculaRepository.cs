@@ -94,23 +94,30 @@ namespace AcademiaDoZe.infrastructure.Repositories
             catch (DbException ex) { throw new InvalidOperationException($"Erro ao obter matrículas do aluno {alunoId}: {ex.Message}", ex); }
         }
 
-        public async Task<IEnumerable<Matricula>> ObterAtivas()
+        public async Task<IEnumerable<Matricula>> ObterAtivas(int idAluno = 0)
         {
             try
             {
                 await using var connection = await GetOpenConnectionAsync();
-                string query = $"SELECT * FROM {TableName} WHERE data_fim >= @Hoje";
+                string query = $"SELECT * FROM {TableName} WHERE data_fim >= {(_databaseType == DatabaseType.SqlServer ? "GETDATE()" :
+                "CURRENT_DATE()")} {(idAluno > 0 ? "AND aluno_id = @id" : "")} ";
                 await using var command = DbProvider.CreateCommand(query, connection);
-                command.Parameters.Add(DbProvider.CreateParameter("@Hoje", DateOnly.FromDateTime(DateTime.Today), DbType.Date, _databaseType));
+                if (idAluno > 0)
+                {
+                    command.Parameters.Add(DbProvider.CreateParameter("@id", idAluno, DbType.Int32, _databaseType));
+                }
                 using var reader = await command.ExecuteReaderAsync();
-                var lista = new List<Matricula>();
+                var matriculas = new List<Matricula>();
                 while (await reader.ReadAsync())
                 {
-                    lista.Add(await MapAsync(reader));
+                    matriculas.Add(await MapAsync(reader));
                 }
-                return lista;
+                return matriculas;
             }
-            catch (DbException ex) { throw new InvalidOperationException($"Erro ao obter matrículas ativas: {ex.Message}", ex); }
+            catch (DbException ex)
+            {
+                throw new InvalidOperationException($"Erro ao obter matrículas ativas: {ex.Message}", ex);
+            }
         }
 
         public async Task<IEnumerable<Matricula>> ObterVencendoEmDias(int dias)

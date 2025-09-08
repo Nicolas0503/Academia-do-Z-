@@ -11,7 +11,7 @@ namespace AcademiaDoZe.Domain.Tests
 {
     public class MatriculaDomainTests
     {
-        private Logradouro GetValidLogradouro() => Logradouro.Criar("12345678", "Rua A", "Centro", "Cidade", "SP", "Brasil");
+        private Logradouro GetValidLogradouro() => Logradouro.Criar(12345678, "Rua A", "Centro", "Cidade", "SP", "Brasil","");
         private Arquivo GetValidArquivo() => Arquivo.Criar(new byte[1], ".jpg");
         private Aluno GetValidAluno(DateOnly? dataNascimento = null)
         {

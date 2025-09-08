@@ -19,17 +19,12 @@ namespace Academia_do_Zé.Entities
         public string Estado { get; }
         public string Pais { get; }
         // construtor privado para evitar instância direta
-        private Logradouro(string cep, string nome, string bairro, string cidade, string estado, string pais) : base()
+        private Logradouro(int id, string cep, string nome, string bairro, string cidade, string estado, string pais) : base(id)
         {
-            Cep = cep;
-            Nome = nome;
-            Bairro = bairro;
-            Cidade = cidade;
-            Estado = estado;
-            Pais = pais;
+            Id = id; Cep = cep; Nome = nome; Bairro = bairro; Cidade = cidade; Estado = estado; Pais = pais;
         }
         // método de fábrica, ponto de entrada para criar um objeto válido e normalizado
-        public static Logradouro Criar(string cep, string nome, string bairro, string cidade, string estado, string pais)
+        public static Logradouro Criar(int id, string cep, string nome, string bairro, string cidade, string estado, string pais)
         {
             // Validações e normalizações
 
@@ -49,7 +44,7 @@ namespace Academia_do_Zé.Entities
             pais = NormalizadoService.LimparEspacos(pais);
             // criação e retorno do objeto
 
-            return new Logradouro(cep, nome, bairro, cidade, estado, pais);
+            return new Logradouro(id, cep, nome, bairro, cidade, estado, pais);
 
         }
     }
