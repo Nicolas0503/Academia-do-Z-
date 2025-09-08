@@ -1,6 +1,7 @@
 ﻿using Konscious.Security.Cryptography;
 using System.Security.Cryptography;
 using System.Text;
+//Nicolas Bastos
 namespace AcademiaDoZe.Application.Security
 {
     // Hash de senha com Argon2id (Konscious). Formato de armazenamento: ARGON2ID:{t}:{mKb}:{p}:{saltBase64}:{hashBase64}

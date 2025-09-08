@@ -8,6 +8,8 @@ using AcademiaDoZe.Application.Security;
 using AcademiaDoZe.infrastructure.Data;
 using AcademiaDoZe.infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+
+//Nicolas Bastos
 namespace AcademiaDoZe.Application.DependencyInjection
 {
     public static class ApplicationDependencyInjection

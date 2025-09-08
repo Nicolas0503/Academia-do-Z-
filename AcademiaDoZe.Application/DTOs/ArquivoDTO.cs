@@ -1,4 +1,6 @@
-﻿namespace AcademiaDoZe.Application.DTOs
+﻿
+//Nicolas Bastos
+namespace AcademiaDoZe.Application.DTOs
 {
     public class ArquivoDTO
     {

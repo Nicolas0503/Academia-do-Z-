@@ -4,6 +4,8 @@ using AcademiaDoZe.Application.Mappings;
 using AcademiaDoZe.infrastructure.Repositories;
 using AcademiaDoZe.Application.Security;
 using Academia_do_Zé.Repositories;
+
+//Nicolas Bastos
 namespace AcademiaDoZe.Application.Services
 {
     public class ColaboradorService : IColaboradorService

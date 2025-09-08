@@ -2,6 +2,7 @@
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
 using Academia_do_Zé.Repositories;
+//Nicolas Bastos
 
 namespace AcademiaDoZe.Application.Services
 {

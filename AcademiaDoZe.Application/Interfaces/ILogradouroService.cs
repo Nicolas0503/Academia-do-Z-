@@ -1,4 +1,6 @@
 ﻿using AcademiaDoZe.Application.DTOs;
+
+//Nicolas Bastos
 namespace AcademiaDoZe.Application.Interfaces
 {
     public interface ILogradouroService
