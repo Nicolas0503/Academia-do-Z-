@@ -9,7 +9,6 @@ public abstract class Pessoa : Entity
 {
     public string Nome { get; protected set; }
 
-    public int id { get; protected set; }
     public string Cpf { get; protected set; }
     public DateOnly DataNascimento { get; protected set; }
     public string Telefone { get; protected set; }
@@ -33,7 +32,7 @@ public abstract class Pessoa : Entity
 
     {
 
-        Id = id;
+        base.Id = Id;
         Nome = nome;
         Cpf = cpf;
         DataNascimento = dataNascimento;

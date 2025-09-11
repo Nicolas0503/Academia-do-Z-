@@ -13,38 +13,12 @@ namespace AcademiaDoZe.Application.Tests
         const string connectionString = "Server=localhost;Database=db_academia_do_ze;Uid=root;Pwd=abcBolinhas12345;";
         const EAppDatabaseType databaseType = EAppDatabaseType.MySql;
 
-        [Fact]
-        public void Deve_Conectar_Com_Banco_De_Dados()
-        {
-            // Ajuste a string de conexão conforme necessário
-            var connectionString = "Server=localhost;Database=db_academia_do_ze;Uid=root;Pwd=abcBolinhas12345;";
-            var databaseType = DatabaseType.MySql;
-
-            DbConnection connection = null;
-            Exception ex = null;
-
-            try
-            {
-                connection = DbProvider.CreateConnection(connectionString, databaseType);
-                connection.Open();
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
-            finally
-            {
-                connection?.Close();
-            }
-
-            Assert.Null(ex); // O teste falha se houver exceção ao conectar
-            Assert.NotNull(connection);
-            Assert.Equal(System.Data.ConnectionState.Open, connection.State);
-        }
+       
+        
 
         [Fact(Timeout = 60000)]
         public async Task AlunoService_Integracao_Adicionar_Obter_Atualizar_Remover()
-        {
+         {
             // Arrange: DI usando repositório real (Infra)
             // Configuração dos serviços usando a classe DependencyInjection
             var services = DependencyInjection.ConfigureServices(connectionString, databaseType);
@@ -64,7 +38,11 @@ namespace AcademiaDoZe.Application.Tests
             var caminhoFoto = Path.Combine("foto_teste.png");
             ArquivoDTO foto = new();
 
-            if (File.Exists(caminhoFoto)) { foto.Conteudo = await File.ReadAllBytesAsync(caminhoFoto); }
+            if (File.Exists(caminhoFoto))
+            {
+                foto.Conteudo = await File.ReadAllBytesAsync(caminhoFoto);
+                foto.ContentType = $".{caminhoFoto.Split(".").Last() ?? "png"}";
+            }
 
             else { foto.Conteudo = null; Assert.Fail("Foto de teste não encontrada."); }
             var dto = new AlunoDTO

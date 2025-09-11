@@ -22,7 +22,7 @@ namespace AcademiaDoZe.Application.Services
             var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
             if (cpfExistente != null)
             {
-                throw new InvalidOperationException($"Aluno com ID {cpfExistente.id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
+                throw new InvalidOperationException($"Aluno com ID {cpfExistente.Id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
             }
             var aluno = alunoDto.ToEntity();
             await _repoFactory().Adicionar(aluno);
@@ -37,9 +37,9 @@ namespace AcademiaDoZe.Application.Services
             if (!string.Equals(alunoExistente.Cpf, alunoDto.Cpf, StringComparison.OrdinalIgnoreCase))
             {
                 var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
-                if (cpfExistente != null && cpfExistente.id != alunoDto.Id)
+                if (cpfExistente != null && cpfExistente.Id != alunoDto.Id)
                 {
-                    throw new InvalidOperationException($"Aluno com ID {cpfExistente.id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
+                    throw new InvalidOperationException($"Aluno com ID {cpfExistente.Id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
                 }
             }
             var alunoAtualizado = alunoExistente.UpdateFromDto(alunoDto);

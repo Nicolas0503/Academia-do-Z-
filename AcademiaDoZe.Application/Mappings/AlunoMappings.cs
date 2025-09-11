@@ -23,7 +23,7 @@ namespace AcademiaDoZe.Application.Mappings
                 Foto = aluno.Foto != null ? new ArquivoDTO
                 {
                     Conteudo = aluno.Foto.Conteudo,
-                    ContentType = "" // Ajuste se houver propriedade de tipo em Arquivo
+                    ContentType = ".jpg" // Ajuste se houver propriedade de tipo em Arquivo
                 } : null!
             };
         }
@@ -42,7 +42,7 @@ namespace AcademiaDoZe.Application.Mappings
                 alunoDto.Complemento ?? string.Empty,
                 alunoDto.Senha ?? string.Empty,
                 alunoDto.Foto != null
-                    ? Arquivo.Criar(alunoDto.Foto.Conteudo!, alunoDto.Foto.ContentType!)
+                    ? Arquivo.Criar(alunoDto.Foto.Conteudo, alunoDto.Foto.ContentType)
                     : null
             );
         }

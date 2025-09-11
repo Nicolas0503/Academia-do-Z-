@@ -9,7 +9,7 @@ namespace AcademiaDoZe.Application.Tests
     public class MatriculaApplicationTests
     {
         // Configurações de conexão
-        const string connectionString = "Server=localhost;Port=3307;Database=db_academia_do_ze;Uid=correa;Pwd=123;AllowPublicKeyRetrieval=True;SslMode=None;";
+        const string connectionString = "Server=localhost;Database=db_academia_do_ze;Uid=root;Pwd=abcBolinhas12345;";
         const EAppDatabaseType databaseType = EAppDatabaseType.MySql;
 
         [Fact(Timeout = 60000)]
@@ -28,7 +28,11 @@ namespace AcademiaDoZe.Application.Tests
             var caminhoFoto = Path.Combine("..", "..", "..", "foto_teste.png");
             ArquivoDTO foto = new();
 
-            if (File.Exists(caminhoFoto)) { foto.Conteudo = await File.ReadAllBytesAsync(caminhoFoto); }
+            if (File.Exists(caminhoFoto))
+            {
+                foto.Conteudo = await File.ReadAllBytesAsync(caminhoFoto);
+                foto.ContentType = "." + caminhoFoto.Split(".").Last() ?? ".png";
+            }
             else { foto.Conteudo = null; Assert.Fail("Foto de teste não encontrada."); }
 
             var enderecoDto = new LogradouroDTO

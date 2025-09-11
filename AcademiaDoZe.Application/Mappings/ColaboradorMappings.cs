@@ -22,7 +22,7 @@ namespace AcademiaDoZe.Application.Mappings
                 Numero = colaborador.Numero,
                 Complemento = colaborador.Complemento,
                 Senha = null, // A senha não deve ser exposta no DTO
-                Foto = colaborador.Foto != null ? new ArquivoDTO { Conteudo = colaborador.Foto.Conteudo } : null, // Mapeia a foto para DTO
+                Foto = colaborador.Foto != null ? new ArquivoDTO { Conteudo = colaborador.Foto.Conteudo, ContentType = ".png"} : null, // Mapeia a foto para DTO
                 DataAdmissao = colaborador.DataAdmissao,
                 Tipo = colaborador.Tipo.ToApp(),
                 Vinculo = colaborador.Vinculo.ToApp()
@@ -41,7 +41,7 @@ namespace AcademiaDoZe.Application.Mappings
             colaboradorDto.Numero,
             colaboradorDto.Complemento!,
             colaboradorDto.Senha!,
-            (colaboradorDto.Foto?.Conteudo != null) ? Arquivo.Criar(colaboradorDto.Foto.Conteudo, "") : null!, // Mapeia a foto do DTO para a entidade
+            (colaboradorDto.Foto?.Conteudo != null) ? Arquivo.Criar(colaboradorDto.Foto.Conteudo, colaboradorDto.Foto.ContentType ?? "") : null!, // Mapeia a foto do DTO para a entidade
             colaboradorDto.DataAdmissao,
             colaboradorDto.Tipo.ToDomain(),
             colaboradorDto.Vinculo.ToDomain()
@@ -60,7 +60,7 @@ namespace AcademiaDoZe.Application.Mappings
             colaboradorDto.Numero ?? colaborador.Numero,
             colaboradorDto.Complemento ?? colaborador.Complemento,
             colaboradorDto.Senha ?? colaborador.Senha,
-            (colaboradorDto.Foto?.Conteudo != null) ? Arquivo.Criar(colaboradorDto.Foto.Conteudo, "") : colaborador.Foto, // Atualiza a foto se fornecida
+            (colaboradorDto.Foto?.Conteudo != null) ? Arquivo.Criar(colaboradorDto.Foto.Conteudo, colaboradorDto.Foto.ContentType) : colaborador.Foto, // Atualiza a foto se fornecida
             colaboradorDto.DataAdmissao != default ? colaboradorDto.DataAdmissao : colaborador.DataAdmissao,
             colaboradorDto.Tipo != default ? colaboradorDto.Tipo.ToDomain() : colaborador.Tipo,
             colaboradorDto.Vinculo != default ? colaboradorDto.Vinculo.ToDomain() : colaborador.Vinculo

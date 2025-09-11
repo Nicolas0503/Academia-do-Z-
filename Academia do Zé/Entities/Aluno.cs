@@ -15,7 +15,9 @@ namespace Academia_do_Zé.Entities
         // construtor privado para evitar instância direta
         private Aluno(int id, string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto)
         : base(nome, cpf, dataNascimento, telefone, email, endereco, numero, complemento, senha, foto)
-        { }
+        {
+            Id = id;
+        }
         // método de fábrica, ponto de entrada para criar um objeto válido
         public static Aluno Criar(int id, string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto)
         {

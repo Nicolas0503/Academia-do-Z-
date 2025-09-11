@@ -24,8 +24,8 @@ namespace AcademiaDoZe.infrastructure.Repositories
             {
                 await using var connection = await GetOpenConnectionAsync();
                 string query = _databaseType == DatabaseType.SqlServer
-                    ? $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricoes_medicas, laudo_medico, observacoes_restricoes) OUTPUT INSERTED.id_matricula VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricoesMedicas, @LaudoMedico, @ObservacoesRestricoes);"
-                    : $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricoes_medicas, laudo_medico, observacoes_restricoes) VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricoesMedicas, @LaudoMedico, @ObservacoesRestricoes); SELECT LAST_INSERT_ID();";
+                    ? $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, laudo_medico, obs_restricao) OUTPUT INSERTED.id_matricula VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricoesMedicas, @LaudoMedico, @ObservacoesRestricoes);"
+                    : $"INSERT INTO {TableName} (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, laudo_medico, obs_restricao) VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricoesMedicas, @LaudoMedico, @ObservacoesRestricoes); SELECT LAST_INSERT_ID();";
                 await using var command = DbProvider.CreateCommand(query, connection);
                 command.Parameters.Add(DbProvider.CreateParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32, _databaseType));
                 command.Parameters.Add(DbProvider.CreateParameter("@Plano", (int)entity.Plano, DbType.Int32, _databaseType));
@@ -51,7 +51,7 @@ namespace AcademiaDoZe.infrastructure.Repositories
             try
             {
                 await using var connection = await GetOpenConnectionAsync();
-                string query = $"UPDATE {TableName} SET aluno_id = @AlunoId, plano = @Plano, data_inicio = @DataInicio, data_fim = @DataFim, objetivo = @Objetivo, restricoes_medicas = @RestricoesMedicas, laudo_medico = @LaudoMedico, observacoes_restricoes = @ObservacoesRestricoes WHERE id_matricula = @Id";
+                string query = $"UPDATE {TableName} SET aluno_id = @AlunoId, plano = @Plano, data_inicio = @DataInicio, data_fim = @DataFim, objetivo = @Objetivo, restricao_medica = @RestricoesMedicas, laudo_medico = @LaudoMedico, obs_restricao = @ObservacoesRestricoes WHERE id_matricula = @Id";
                 await using var command = DbProvider.CreateCommand(query, connection);
                 command.Parameters.Add(DbProvider.CreateParameter("@Id", entity.Id, DbType.Int32, _databaseType));
                 command.Parameters.Add(DbProvider.CreateParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32, _databaseType));
@@ -154,9 +154,9 @@ namespace AcademiaDoZe.infrastructure.Repositories
                     dataInicio: DateOnly.FromDateTime(Convert.ToDateTime(reader["data_inicio"])),
                     dataFim: DateOnly.FromDateTime(Convert.ToDateTime(reader["data_fim"])),
                     objetivo: reader["objetivo"].ToString()!,
-                    restricoesMedicas: (EMatriculaRestricoes)Convert.ToInt32(reader["restricoes_medicas"]),
+                    restricoesMedicas: (EMatriculaRestricoes)Convert.ToInt32(reader["restricao_medica"]),
                     laudoMedico: reader["laudo_medico"] is DBNull ? null : Arquivo.Criar((byte[])reader["laudo_medico"], "pdf"),
-                    observacoesRestricoes: reader["observacoes_restricoes"]?.ToString() ?? string.Empty
+                    observacoesRestricoes: reader["obs_restricao"]?.ToString() ?? string.Empty
                 );
                 var idProperty = typeof(Entity).GetProperty("Id");
                 idProperty?.SetValue(matricula, Convert.ToInt32(reader["id_matricula"]));

@@ -152,7 +152,7 @@ namespace AcademiaDoZe.infrastructure.Repositories
                     numero: reader["numero"].ToString()!,
                     complemento: reader["complemento"]?.ToString(),
                     senha: reader["senha"].ToString()!,
-                    foto: reader["foto"] is DBNull ? null : Academia_do_Zé.ValueObjects.Arquivo.Criar((byte[])reader["foto"], "jpg")
+                    foto: reader["foto"] is DBNull ? null : Academia_do_Zé.ValueObjects.Arquivo.Criar((byte[])reader["foto"], ".jpg")
                 );
                 var idProperty = typeof(Entity).GetProperty("Id");
                 idProperty?.SetValue(aluno, Convert.ToInt32(reader["id_aluno"]));
