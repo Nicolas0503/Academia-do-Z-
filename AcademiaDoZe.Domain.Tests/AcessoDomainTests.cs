@@ -13,6 +13,7 @@ namespace AcademiaDoZe.Domain.Tests
     {
         private Aluno GetValidAluno() =>
             Aluno.Criar(
+                3,
                 "João da Silva",
                 "12345678901",
                 DateOnly.FromDateTime(DateTime.Today.AddYears(-20)),

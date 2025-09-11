@@ -10,7 +10,7 @@ using Academia_do_Zé.ValueObjects;
 //Nícolas Bastos
 
 namespace Academia_do_Zé.Entities
-{ 
+{
     public class Colaborador : Pessoa
     {
         // encapsulamento das propriedades, aplicando imutabilidade
@@ -18,17 +18,15 @@ namespace Academia_do_Zé.Entities
         public EColaboradorTipo Tipo { get; private set; }
         public EColaboradorVinculo Vinculo { get; private set; }
         // construtor privado para evitar instância direta
-        private Colaborador(string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto, DateOnly dataAdmissao, EColaboradorTipo tipo, EColaboradorVinculo
-        vinculo)
-        : base(nome, cpf, dataNascimento, telefone, email, endereco, numero, complemento, senha, foto)
+        private Colaborador(string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto, DateOnly dataAdmissao, EColaboradorTipo tipo, EColaboradorVinculo vinculo)
+            : base(nome, cpf, dataNascimento, telefone, email, endereco, numero, complemento, senha, foto)
         {
             DataAdmissao = dataAdmissao;
             Tipo = tipo;
             Vinculo = vinculo;
         }
         // método de fábrica, ponto de entrada para criar um objeto válido
-        public static Colaborador Criar(string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto, DateOnly dataAdmissao, EColaboradorTipo tipo,
-        EColaboradorVinculo vinculo)
+        public static Colaborador Criar(string nome, string cpf, DateOnly dataNascimento, string telefone, string email, Logradouro endereco, string numero, string complemento, string senha, Arquivo foto, DateOnly dataAdmissao, EColaboradorTipo tipo, EColaboradorVinculo vinculo)
         {
             // Validações e normalizações
             if (NormalizadoService.TextoVazioOuNulo(nome)) throw new DomainException("NOME_OBRIGATORIO");
@@ -55,14 +53,10 @@ namespace Academia_do_Zé.Entities
             if (dataAdmissao > DateOnly.FromDateTime(DateTime.Today)) throw new DomainException("DATA_ADMISSAO_MAIOR_ATUAL");
             if (!Enum.IsDefined(tipo)) throw new DomainException("TIPO_COLABORADOR_INVALIDO");
             if (!Enum.IsDefined(vinculo)) throw new DomainException("VINCULO_COLABORADOR_INVALIDO");
-            if (tipo == EColaboradorTipo.Administrador && vinculo == EColaboradorVinculo.CLT) throw new DomainException("ADMINISTRADOR_CLT_INVALIDO");
+            // Linha removida: restrição ADMINISTRADOR_CLT_INVALIDO
             // Cpf único - vamos depender da persistência dos dados
             // criação e retorno do objeto
             return new Colaborador(nome, cpf, dataNascimento, telefone, email, endereco, numero, complemento, senha, foto, dataAdmissao, tipo, vinculo);
         }
     }
 }
-
-
-
-

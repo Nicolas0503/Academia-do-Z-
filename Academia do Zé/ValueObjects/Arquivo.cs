@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Academia_do_Zé.Exceptions;
 
-
 //Nícolas Bastos
 
 namespace Academia_do_Zé.ValueObjects
@@ -17,6 +16,7 @@ namespace Academia_do_Zé.ValueObjects
         {
             Conteudo = conteudo;
         }
+
         public static Arquivo Criar(byte[] conteudo, string tipoArquivo)
         {
             if (conteudo == null || conteudo.Length == 0)
@@ -30,9 +30,17 @@ namespace Academia_do_Zé.ValueObjects
             if (conteudo.Length > tamanhoMaximoBytes)
                 throw new DomainException("ARQUIVO_TIPO_TAMANHO");
             // cria e retorna o objeto
-
             return new Arquivo(conteudo);
+        }
 
+        public static Arquivo Criar(byte[] conteudo)
+        {
+            if (conteudo == null || conteudo.Length == 0)
+                throw new DomainException("ARQUIVO_VAZIO");
+            const int tamanhoMaximoBytes = 5 * 1024 * 1024; // 5MB
+            if (conteudo.Length > tamanhoMaximoBytes)
+                throw new DomainException("ARQUIVO_TIPO_TAMANHO");
+            return new Arquivo(conteudo);
         }
     }
 }

@@ -42,6 +42,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             Assert.False(cpfExiste);
 
             var aluno = Aluno.Criar(
+                id: 1,
                 nome: "Aluno Teste",
                 cpf: cpf,
                 dataNascimento: DataNascimentoValida(),
@@ -75,6 +76,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             var repoAluno = new AlunoRepository(ConnectionString, DatabaseType);
 
             var aluno = Aluno.Criar(
+                id: 2,
                 nome: "Aluno Teste",
                 cpf: cpf,
                 dataNascimento: DataNascimentoValida(),
@@ -93,6 +95,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
 
             var novoArquivo = Academia_do_Zé.ValueObjects.Arquivo.Criar(new byte[] { 4, 5, 6 }, "jpeg");
             var alunoAtualizado = Aluno.Criar(
+                id: alunoExistente.Id,
                 nome: "Aluno Editado",
                 cpf: alunoExistente.Cpf,
                 dataNascimento: alunoExistente.DataNascimento,
@@ -129,6 +132,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             var repoAluno = new AlunoRepository(ConnectionString, DatabaseType);
 
             var aluno = Aluno.Criar(
+                id: 3,
                 nome: "Aluno Teste",
                 cpf: cpf,
                 dataNascimento: DataNascimentoValida(),
@@ -170,6 +174,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             var repoAluno = new AlunoRepository(ConnectionString, DatabaseType);
 
             var aluno = Aluno.Criar(
+                id: 4,
                 nome: "Aluno Teste",
                 cpf: cpf,
                 dataNascimento: DataNascimentoValida(),

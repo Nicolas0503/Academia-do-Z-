@@ -16,6 +16,7 @@ namespace AcademiaDoZe.Domain.Tests
         private Aluno GetValidAluno(DateOnly? dataNascimento = null)
         {
             return Aluno.Criar(
+                2,
                 "João da Silva",
                 "12345678901",
                 dataNascimento ?? DateOnly.FromDateTime(DateTime.Today.AddYears(-20)),

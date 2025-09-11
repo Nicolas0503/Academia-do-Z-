@@ -43,13 +43,21 @@ namespace AcademiaDoZe.infrastructure.Repositories
                 var id = await command.ExecuteScalarAsync();
                 if (id != null && id != DBNull.Value)
                 {
+                    int idInt = id switch
+                    {
+                        int i => i,
+                        long l => (int)l,
+                        decimal d => (int)d,
+                        _ => Convert.ToInt32(id)
+                    };
                     var idProperty = typeof(Entity).GetProperty("Id");
-                    idProperty?.SetValue(entity, Convert.ToInt32(id));
+                    idProperty?.SetValue(entity, idInt);
                 }
                 return entity;
             }
             catch (DbException ex) { throw new InvalidOperationException($"Erro ao adicionar colaborador: {ex.Message}", ex); }
         }
+
 
         public override async Task<Colaborador> Atualizar(Colaborador entity)
         {

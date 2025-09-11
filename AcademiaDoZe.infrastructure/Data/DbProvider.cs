@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Nícolas Bastos
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data;
@@ -9,8 +10,6 @@ using AcademiaDoZe.infrastructure.Exceptions;
 using Microsoft.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
-//Nícolas Bastos
-
 namespace AcademiaDoZe.infrastructure.Data
 {
     public enum DatabaseType { SqlServer, MySql }
@@ -18,6 +17,7 @@ namespace AcademiaDoZe.infrastructure.Data
     {
         // Timeout padrão de 30 segundos para todos os comandos
         public const int DefaultCommandTimeout = 30;
+
         public static DbConnection CreateConnection(string connectionString, DatabaseType dbType)
         {
             try
@@ -31,8 +31,12 @@ namespace AcademiaDoZe.infrastructure.Data
                 if (connection == null) throw new InfrastructureException($"FALHA_CONEXAO {dbType}");
                 return connection;
             }
-            catch (DbException ex) { throw new InfrastructureException($"FALHA_CONEXAO {dbType}", ex); }
+            catch (Exception ex) // Use Exception para capturar erros de string inválida também
+            {
+                throw new InfrastructureException($"FALHA_CONEXAO {dbType}: {ex.Message}", ex);
+            }
         }
+
         public static DbCommand CreateCommand(string commandText, DbConnection connection, CommandType commandType = CommandType.Text)
         {
             if (connection == null) { throw new ArgumentNullException($"COMMAND_CONEXAO_NULL"); }
@@ -47,6 +51,7 @@ namespace AcademiaDoZe.infrastructure.Data
             }
             catch (DbException ex) { throw new InfrastructureException($"FALHA_CRIAR_COMANDO", ex); }
         }
+
         public static DbParameter CreateParameter(string name, object value, DbType dbType, DatabaseType databaseType)
         {
             if (string.IsNullOrWhiteSpace(name)) { throw new ArgumentException($"PARAMETER_VAZIO"); }

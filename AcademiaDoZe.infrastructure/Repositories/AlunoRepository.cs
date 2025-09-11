@@ -142,6 +142,7 @@ namespace AcademiaDoZe.infrastructure.Repositories
                 var logradouroRepository = new LogradouroRepository(_connectionString, _databaseType);
                 var logradouro = await logradouroRepository.ObterPorId(logradouroId) ?? throw new InvalidOperationException($"Logradouro com ID {logradouroId} não encontrado.");
                 var aluno = Aluno.Criar(
+                    id: Convert.ToInt32(reader["id_aluno"]),
                     nome: reader["nome"].ToString()!,
                     cpf: reader["cpf"].ToString()!,
                     dataNascimento: DateOnly.FromDateTime(Convert.ToDateTime(reader["nascimento"])),
@@ -158,6 +159,11 @@ namespace AcademiaDoZe.infrastructure.Repositories
                 return aluno;
             }
             catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do aluno: {ex.Message}", ex); }
+        }
+
+        public Task<Aluno?> ObterPorEmail(string email)
+        {
+            throw new NotImplementedException();
         }
     }
 }

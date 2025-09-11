@@ -37,7 +37,7 @@ namespace AcademiaDoZe.Application.DependencyInjection
                 var config = provider.GetRequiredService<RepositoryConfig>();
                 return (Func<IColaboradorRepository>)(() => new ColaboradorRepository(config.ConnectionString, (DatabaseType)config.DatabaseType));
             });
-            /*
+            
             services.AddTransient(provider =>
             {
             var config = provider.GetRequiredService<RepositoryConfig>();
@@ -48,7 +48,7 @@ namespace AcademiaDoZe.Application.DependencyInjection
             var config = provider.GetRequiredService<RepositoryConfig>();
             return (Func<IMatriculaRepository>)(() => new MatriculaRepository(config.ConnectionString, (DatabaseType)config.DatabaseType));
             });
-            */
+            
             return services;
         }
     }

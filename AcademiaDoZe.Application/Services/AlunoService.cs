@@ -1,66 +1,80 @@
-﻿using AcademiaDoZe.Application.DTOs;
+﻿using Academia_do_Zé.Repositories;
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
-using Academia_do_Zé.Repositories;
+using AcademiaDoZe.infrastructure.Repositories;
 
 //Nicolas Bastos
-
 namespace AcademiaDoZe.Application.Services
 {
     public class AlunoService : IAlunoService
     {
-        private readonly IAlunoRepository _alunoRepository;
-
-        public AlunoService(IAlunoRepository alunoRepository)
+        // Func que cria instâncias do repositório quando necessário, garantindo freshness e evitando problemas de ciclo de vida
+        private readonly Func<IAlunoRepository> _repoFactory;
+        public AlunoService(Func<IAlunoRepository> repoFactory)
         {
-            _alunoRepository = alunoRepository;
+            _repoFactory = repoFactory ?? throw new ArgumentNullException(nameof(repoFactory));
         }
 
-        public async Task<AlunoDTO> ObterPorIdAsync(int id)
+        public async Task<AlunoDTO> AdicionarAsync(AlunoDTO alunoDto)
         {
-            var aluno = await _alunoRepository.ObterPorId(id);
-            return aluno?.ToDto()!;
+            // Exemplo: validação de CPF único (ajuste conforme sua regra de negócio)
+            var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
+            if (cpfExistente != null)
+            {
+                throw new InvalidOperationException($"Aluno com ID {cpfExistente.id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
+            }
+            var aluno = alunoDto.ToEntity();
+            await _repoFactory().Adicionar(aluno);
+            return aluno.ToDto();
         }
 
-        public async Task<IEnumerable<AlunoDTO>> ObterTodosAsync()
+        public async Task<AlunoDTO> AtualizarAsync(AlunoDTO alunoDto)
         {
-            var alunos = await _alunoRepository.ObterTodos();
-            return alunos.Select(a => a.ToDto());
-        }
+            var alunoExistente = await _repoFactory().ObterPorId(alunoDto.Id) ?? throw new KeyNotFoundException($"Aluno ID {alunoDto.Id} não encontrado.");
 
-        public async Task<AlunoDTO> AdicionarAsync(AlunoDTO dto)
-        {
-            var aluno = dto.ToEntity();
-            var adicionado = await _alunoRepository.Adicionar(aluno);
-            return adicionado.ToDto();
-        }
-
-        public async Task<AlunoDTO> AtualizarAsync(AlunoDTO dto)
-        {
-            var aluno = dto.ToEntity();
-            var atualizado = await _alunoRepository.Atualizar(aluno);
-            return atualizado.ToDto();
-        }
-
-        public async Task<bool> RemoverAsync(int id)
-        {
-            return await _alunoRepository.Remover(id);
+            // Exemplo: validação de CPF único ao atualizar
+            if (!string.Equals(alunoExistente.Cpf, alunoDto.Cpf, StringComparison.OrdinalIgnoreCase))
+            {
+                var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
+                if (cpfExistente != null && cpfExistente.id != alunoDto.Id)
+                {
+                    throw new InvalidOperationException($"Aluno com ID {cpfExistente.id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
+                }
+            }
+            var alunoAtualizado = alunoExistente.UpdateFromDto(alunoDto);
+            await _repoFactory().Atualizar(alunoAtualizado);
+            return alunoAtualizado.ToDto();
         }
 
         public async Task<AlunoDTO> ObterPorCpfAsync(string cpf)
         {
-            var aluno = await _alunoRepository.ObterPorCpf(cpf);
-            return aluno?.ToDto()!;
+            var aluno = await _repoFactory().ObterPorCpf(cpf);
+            return aluno != null ? aluno.ToDto() : null!;
         }
 
-        public async Task<bool> CpfJaExisteAsync(string cpf, int? id = null)
+
+        public async Task<AlunoDTO> ObterPorIdAsync(int id)
         {
-            return await _alunoRepository.CpfJaExiste(cpf, id);
+            var aluno = await _repoFactory().ObterPorId(id);
+            return (aluno != null) ? aluno.ToDto() : null!;
         }
 
-        public async Task<bool> TrocarSenhaAsync(int id, string novaSenha)
+        public async Task<IEnumerable<AlunoDTO>> ObterTodosAsync()
         {
-            return await _alunoRepository.TrocarSenha(id, novaSenha);
+            var alunos = await _repoFactory().ObterTodos();
+            return [.. alunos.Select(a => a.ToDto())];
+        }
+
+        public async Task<bool> RemoverAsync(int id)
+        {
+            var aluno = await _repoFactory().ObterPorId(id);
+            if (aluno == null)
+            {
+                return false;
+            }
+            await _repoFactory().Remover(id);
+            return true;
         }
     }
 }
