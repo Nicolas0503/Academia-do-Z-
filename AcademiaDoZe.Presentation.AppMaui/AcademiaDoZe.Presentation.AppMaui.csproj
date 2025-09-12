@@ -67,6 +67,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\AcademiaDoZe.Application\AcademiaDoZe.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Views\LogradouroPage.xaml.cs">
 	    <DependentUpon>LogradouroPage.xaml</DependentUpon>
 	  </Compile>
