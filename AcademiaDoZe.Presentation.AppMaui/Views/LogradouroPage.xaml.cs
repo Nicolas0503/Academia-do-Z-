@@ -1,9 +1,20 @@
+using AcademiaDoZe.Presentation.AppMaui.ViewModels;
 namespace AcademiaDoZe.Presentation.AppMaui.Views;
-
-public partial class NewPage1 : ContentPage
+public partial class LogradouroPage : ContentPage
 {
-	public NewPage1()
-	{
-		InitializeComponent();
-	}
+    public LogradouroPage(LogradouroViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is LogradouroViewModel viewModel)
+
+        {
+            await viewModel.InitializeAsync();
+        }
+    }
 }

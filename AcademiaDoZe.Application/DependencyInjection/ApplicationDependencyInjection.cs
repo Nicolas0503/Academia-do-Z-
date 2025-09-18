@@ -43,12 +43,12 @@ namespace AcademiaDoZe.Application.DependencyInjection
             var config = provider.GetRequiredService<RepositoryConfig>();
             return (Func<IAlunoRepository>)(() => new AlunoRepository(config.ConnectionString, (DatabaseType)config.DatabaseType));
             });
-            services.AddTransient(provider =>
+            services.AddTransient<IMatriculaRepository>(provider =>
             {
-            var config = provider.GetRequiredService<RepositoryConfig>();
-            return (Func<IMatriculaRepository>)(() => new MatriculaRepository(config.ConnectionString, (DatabaseType)config.DatabaseType));
+                var config = provider.GetRequiredService<RepositoryConfig>();
+                return new MatriculaRepository(config.ConnectionString, (DatabaseType)config.DatabaseType);
             });
-            
+
             return services;
         }
     }
