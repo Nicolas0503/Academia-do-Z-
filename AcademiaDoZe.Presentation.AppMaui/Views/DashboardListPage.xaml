@@ -21,7 +21,12 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToLogradourosCommand}"/>
                     </Border.GestureRecognizers>
+                    
+                    
                     <StackLayout Spacing="10">
+
+                        <Label FontFamily="MaterialIcons" Text="&#xe7f1;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
+                        
                         <Label Text="{Binding TotalLogradouros}" Style="{StaticResource SubHeadline}" FontSize="32"/>
                         <Label Text="Logradouros" HorizontalTextAlignment="Center" FontSize="18"/>
                     </StackLayout>
@@ -31,7 +36,12 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToAlunosCommand}"/>
                     </Border.GestureRecognizers>
+                    
+                    
                     <StackLayout Spacing="10">
+
+                        <Label FontFamily="MaterialIcons" Text="&#xe54b;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" WidthRequest="" />
+                        
                         <Label Text="{Binding TotalAlunos}" Style="{StaticResource SubHeadline}" FontSize="32"/>
                         <Label Text="Alunos" HorizontalTextAlignment="Center" FontSize="18"/>
                     </StackLayout>
@@ -41,7 +51,12 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToColaboradoresCommand}"/>
                     </Border.GestureRecognizers>
+                    
+                    
                     <StackLayout Spacing="10">
+
+                        <Label FontFamily="MaterialIcons" Text="&#xe7ee;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
+                        
                         <Label Text="{Binding TotalColaboradores}" Style="{StaticResource SubHeadline}" FontSize="32"/>
                         <Label Text="Colaboradores" HorizontalTextAlignment="Center" FontSize="18"/>
                     </StackLayout>
@@ -51,7 +66,12 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding NavigateToMatriculasCommand}"/>
                     </Border.GestureRecognizers>
+                    
+                    
                     <StackLayout Spacing="10">
+
+                        <Label FontFamily="MaterialIcons" Text="&#xef40;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" />
+                        
                         <Label Text="{Binding TotalMatriculas}" Style="{StaticResource SubHeadline}" FontSize="32"/>
                         <Label Text="Matrículas" HorizontalTextAlignment="Center" FontSize="18"/>
                     </StackLayout>

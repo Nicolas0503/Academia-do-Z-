@@ -1,42 +1,58 @@
 ﻿using AcademiaDoZe.Application.DependencyInjection;
 using AcademiaDoZe.Application.Enums;
+using AcademiaDoZe.Presentation.AppMaui.Message;
+using CommunityToolkit.Mvvm.Messaging;
 namespace AcademiaDoZe.Presentation.AppMaui.Configuration
 {
+    /* ConfigurationHelper - config inicial a partir das Preferences - recarga automática via Messenger */
     public static class ConfigurationHelper
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = GetMySqlConnectionString();
+            // lê as preferências do banco de dados
 
-            const EAppDatabaseType databaseType = EAppDatabaseType.MySql;
-            // Configura a fábrica de repositórios com a string de conexão e tipo de banco
-            services.AddSingleton(new RepositoryConfig
-            {
-                ConnectionString = connectionString,
-                DatabaseType = databaseType
-            });
-            // configura os serviços da camada de aplicação
+            var (connectionString, databaseType) = ReadDbPreferences();
+            var repoConfig = new RepositoryConfig { ConnectionString = connectionString, DatabaseType = databaseType };
+
+            services.AddSingleton(repoConfig);
             services.AddApplicationServices();
-        }
+            // Assina a mensagem e aplica as mudanças automática
+            WeakReferenceMessenger.Default.Register<RepositoryConfig, BancoPreferencesUpdatedMessage>(
+            // recipient é o RepositoryConfig singleton
+            recipient: repoConfig, handler: static (recipient, message) =>
+            {
+                // aplica as novas configurações
 
-        private static string GetSQLConnectionString()
+                var (connectionString, databaseType) = ReadDbPreferences();
+
+                recipient.ConnectionString = connectionString;
+                recipient.DatabaseType = databaseType;
+            });
+        }
+        private static (string ConnectionString, EAppDatabaseType DatabaseType) ReadDbPreferences()
         {
             // dados conexão
-            const string dbServer = "172.24.32.1";
-            const string dbDatabase = "db_academia_do_ze";
-            const string dbUser = "sa";
-            const string dbPassword = "abcBolinhas12345";
-            const string dbComplemento = "TrustServerCertificate=True;Encrypt=True;";
-            // se for necessário indicar a porta, incluir junto em dbComplemento
 
-            // Configurações de conexão
-            return $"Server={dbServer};Database={dbDatabase};User Id={dbUser};Password={dbPassword};{dbComplemento}";
+            string dbServer = Preferences.Get("Servidor", "localhost"); // "172.24.32.1"
+            string dbDatabase = Preferences.Get("Banco", "db_academia_do_ze"); // "db_academia_do_ze"
+            string dbUser = Preferences.Get("Usuario", "root"); // "sa"
+            string dbPassword = Preferences.Get("Senha", "abcBolinhas12345"); // "abcBolinhas12345"
+            string dbComplemento = Preferences.Get("Complemento", ""); // "TrustServerCertificate=True;Encrypt=True;"
+                                                                       // Configurações de conexão
 
+            string connectionString = $"Server={dbServer};Database={dbDatabase};User Id={dbUser};Password={dbPassword};{dbComplemento}";
+
+            // obtém o tipo de banco de dados selecionado nas preferências
+
+            var dbType = Preferences.Get("DatabaseType", EAppDatabaseType.MySql.ToString()) switch
+
+            {
+                "SqlServer" => EAppDatabaseType.SqlServer,
+                "MySql" => EAppDatabaseType.MySql,
+                _ => EAppDatabaseType.SqlServer
+
+            };
+            return (connectionString, dbType);
         }
-        private static string GetMySqlConnectionString()
-        {
-           return "Server=localhost;Database=db_academia_do_ze;Uid=root;Pwd=abcBolinhas12345;";
-        }
-
     }
 }

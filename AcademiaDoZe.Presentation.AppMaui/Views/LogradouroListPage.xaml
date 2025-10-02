@@ -62,9 +62,18 @@ Command="{Binding SearchLogradourosCommand}"/>
                                         <Label Grid.Row="4" Grid.Column="0" Text="{Binding Pais}" Margin="0,0,0,5"/>
 
                                         <!-- Botões de Ação -->
-
-                                        <Button Grid.Row="0" Grid.Column="1" Text="Editar" Style="{StaticResource ButtonSmall}" Margin="4,0" Clicked="OnEditButtonClicked" />
-                                        <Button Grid.Row="0" Grid.Column="2" Text="Excluir" Style="{StaticResource ButtonDanger}" Margin="4,0" Clicked="OnDeleteButtonClicked" />
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="15,10">
+                                            <Button Grid.Column="0" Text="Cancelar" Command="{Binding CancelCommand}" Style="{StaticResource ButtonSecondary}" HeightRequest="50" WidthRequest="400">
+                                                <Button.ImageSource>
+                                                    <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe5c9;" Color="Black" />
+                                                </Button.ImageSource>
+                                            </Button>
+                                            <Button Grid.Column="1" Text="Salvar" Command="{Binding SaveColaboradorCommand}" Style="{StaticResource ButtonPrimary}" HeightRequest="50" WidthRequest="400">
+                                                <Button.ImageSource>
+                                                    <FontImageSource FontFamily="MaterialIcons" Glyph="&#xe86c;" />
+                                                </Button.ImageSource>
+                                            </Button>
+                                        </Grid>
                                     </Grid>
                                 </Border>
                             </Grid>
