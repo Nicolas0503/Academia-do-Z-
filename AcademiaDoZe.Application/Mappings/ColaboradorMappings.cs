@@ -49,8 +49,7 @@ namespace AcademiaDoZe.Application.Mappings
         }
         public static Colaborador UpdateFromDto(this Colaborador colaborador, ColaboradorDTO colaboradorDto)
         {
-            return Colaborador.Criar(
-            
+            var colab = Colaborador.Criar(
             colaboradorDto.Nome ?? colaborador.Nome,
             colaborador.Cpf, // CPF não pode ser alterado
             colaboradorDto.DataNascimento != default ? colaboradorDto.DataNascimento : colaborador.DataNascimento,
@@ -65,6 +64,14 @@ namespace AcademiaDoZe.Application.Mappings
             colaboradorDto.Tipo != default ? colaboradorDto.Tipo.ToDomain() : colaborador.Tipo,
             colaboradorDto.Vinculo != default ? colaboradorDto.Vinculo.ToDomain() : colaborador.Vinculo
             );
+
+            var property = typeof(Colaborador).GetProperty("Id");
+            if (property != null)
+            {
+                property.SetValue(colab, colaboradorDto.Id);
+            }
+
+            return colab;
         }
     }
 }

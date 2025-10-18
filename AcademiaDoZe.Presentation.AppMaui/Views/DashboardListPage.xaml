@@ -40,7 +40,7 @@
                     
                     <StackLayout Spacing="10">
 
-                        <Label FontFamily="MaterialIcons" Text="&#xe54b;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" WidthRequest="" />
+                        <Label FontFamily="MaterialIcons" Text="&#xe54b;" Style="{StaticResource SubHeadline}" HorizontalTextAlignment="Center" WidthRequest="0" />
                         
                         <Label Text="{Binding TotalAlunos}" Style="{StaticResource SubHeadline}" FontSize="32"/>
                         <Label Text="Alunos" HorizontalTextAlignment="Center" FontSize="18"/>
