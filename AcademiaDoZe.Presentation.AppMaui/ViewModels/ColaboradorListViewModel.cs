@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Application.DTOs;
+﻿using Academia_do_Zé.Entities;
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -105,11 +106,11 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
                 }
                 else if (SelectedFilterType == "CPF")
                 {
-                    var colaborador = await _colaboradorService.ObterPorCpfAsync(SearchText);
+                    // ObterPorCpfAsync agora retorna IEnumerable<ColaboradorDTO>
 
-                    if (colaborador != null)
+                    var colaboradores = await _colaboradorService.ObterPorCpfAsync(SearchText) ?? Enumerable.Empty<ColaboradorDTO>();
 
-                        resultados = new[] { colaborador };
+                    resultados = colaboradores;
                 }
                 // Atualiza a coleção na thread principal
 
@@ -209,6 +210,53 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             {
                 IsBusy = false;
             }
+        }
+        [RelayCommand]
+        public async Task SearchByCpfAsync(ColaboradorDTO colaborador)
+        {
+            if (string.IsNullOrWhiteSpace(colaborador.Cpf))
+                return;
+            try
+            {
+                IsBusy = true;
+                // normaliza para apenas dígitos (o repositório espera dígitos)
+
+                var cpfNormalized = new string(colaborador.Cpf.Where(char.IsDigit).ToArray());
+
+                var resultados = (await _colaboradorService.ObterPorCpfAsync(cpfNormalized))?.ToList() ?? new List<ColaboradorDTO>();
+                if (!resultados.Any())
+                {
+                    await Shell.Current.DisplayAlert("Aviso", "CPF não encontrado.", "OK"); return;
+                }
+                if (resultados.Count == 1)
+                {
+                    colaborador = resultados.First();
+                    await Shell.Current.DisplayAlert("Aviso", "Colaborador já cadastrado! Dados carregados para edição.", "OK"); return;
+                }
+                // múltiplos resultados -> perguntar ao usuário qual selecionar
+
+                var options = resultados.Select(c => $"{c.Id} - {c.Nome} ({c.Cpf})").ToArray();
+
+                var escolha = await Shell.Current.DisplayActionSheet("Vários colaboradores encontrados", "Cancelar", null, options);
+                if (string.IsNullOrWhiteSpace(escolha) || escolha == "Cancelar")
+                    return;
+                // extrai ID a partir da string selecionada ("{Id} - ...")
+                var idStr = escolha.Split('-', 2).FirstOrDefault()?.Trim();
+                if (int.TryParse(idStr, out var selId))
+
+                {
+                    var selecionado = resultados.FirstOrDefault(c => c.Id == selId);
+
+                    if (selecionado != null)
+
+                    {
+                        colaborador = selecionado;
+                        await Shell.Current.DisplayAlert("Aviso", "Colaborador selecionado: dados carregados para edição.", "OK");
+                    }
+                }
+            }
+            catch (Exception ex) { await Shell.Current.DisplayAlert("Erro", $"Erro ao buscar CPF: {ex.Message}", "OK"); }
+            finally { IsBusy = false; }
         }
     }
 }

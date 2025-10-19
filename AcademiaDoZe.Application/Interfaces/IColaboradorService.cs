@@ -10,8 +10,8 @@ namespace AcademiaDoZe.Application.Interfaces
         Task<ColaboradorDTO> AdicionarAsync(ColaboradorDTO colaboradorDto);
         Task<ColaboradorDTO> AtualizarAsync(ColaboradorDTO colaboradorDto);
         Task<bool> RemoverAsync(int id);
-        Task<ColaboradorDTO> ObterPorCpfAsync(string cpf);
         Task<bool> CpfJaExisteAsync(string cpf, int? id = null);
         Task<bool> TrocarSenhaAsync(int id, string novaSenha);
+        Task<IEnumerable<ColaboradorDTO>> ObterPorCpfAsync(string cpf);
     }
 }

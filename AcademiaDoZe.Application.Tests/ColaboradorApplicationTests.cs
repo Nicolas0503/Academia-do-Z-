@@ -60,7 +60,7 @@ namespace AcademiaDoZe.Application.Tests
                 Assert.True(criado!.Id > 0);
 
                 // Obter por cpf
-                var obtido = await colaboradorService.ObterPorCpfAsync(criado.Cpf);
+                var obtido = (await colaboradorService.ObterPorCpfAsync(criado.Cpf)).First();
                 Assert.NotNull(obtido);
                 Assert.Equal(criado.Id, obtido!.Id);
 

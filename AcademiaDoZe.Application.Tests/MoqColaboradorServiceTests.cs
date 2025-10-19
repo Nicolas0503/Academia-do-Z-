@@ -185,7 +185,7 @@ namespace AcademiaDoZe.Application.Tests
             var colaboradorDto = CriarColaboradorPadrao(1);
 
             colaboradorDto.Cpf = cpf;
-            _colaboradorServiceMock.Setup(s => s.ObterPorCpfAsync(cpf)).ReturnsAsync(colaboradorDto);
+            _colaboradorServiceMock.Setup(s => s.ObterPorCpfAsync(cpf)).ReturnsAsync(new List<ColaboradorDTO> { colaboradorDto });
             // Act
 
             var result = await _colaboradorService.ObterPorCpfAsync(cpf);
@@ -193,7 +193,7 @@ namespace AcademiaDoZe.Application.Tests
             // Assert
 
             Assert.NotNull(result);
-            Assert.Equal(cpf, result.Cpf);
+            Assert.Equal(cpf, result.First().Cpf);
 
             _colaboradorServiceMock.Verify(s => s.ObterPorCpfAsync(cpf), Times.Once);
         }
@@ -205,7 +205,7 @@ namespace AcademiaDoZe.Application.Tests
 
             var cpf = "99999999999";
 
-            _colaboradorServiceMock.Setup(s => s.ObterPorCpfAsync(cpf)).ReturnsAsync((ColaboradorDTO)null!);
+            _colaboradorServiceMock.Setup(s => s.ObterPorCpfAsync(cpf)).ReturnsAsync(new List<ColaboradorDTO>());
             // Act
 
             var result = await _colaboradorService.ObterPorCpfAsync(cpf);

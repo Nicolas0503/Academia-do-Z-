@@ -65,7 +65,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             var _cpf = "12345678900";
             Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 }, "");
             var repoColaboradorObterPorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
-            var colaboradorExistente = await repoColaboradorObterPorCpf.ObterPorCpf(_cpf);
+            var colaboradorExistente = (await repoColaboradorObterPorCpf.ObterPorCpf(_cpf)).First();
             Assert.NotNull(colaboradorExistente);
 
             // criar novo colaborador com os mesmos dados, editando o que quiser
@@ -106,7 +106,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
             var _cpf = "12345678900";
             Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 }, "");
             var repoColaboradorObterPorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
-            var colaboradorExistente = await repoColaboradorObterPorCpf.ObterPorCpf(_cpf);
+            var colaboradorExistente = (await repoColaboradorObterPorCpf.ObterPorCpf(_cpf)).First();
             Assert.NotNull(colaboradorExistente);
             var novaSenha = "novaSenha123";
             var repoColaboradorTrocarSenha = new ColaboradorRepository(ConnectionString, DatabaseType);
@@ -125,7 +125,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
         {
             var _cpf = "12345678900";
             var repoColaboradorObterPorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
-            var colaboradorExistente = await repoColaboradorObterPorCpf.ObterPorCpf(_cpf);
+            var colaboradorExistente = (await repoColaboradorObterPorCpf.ObterPorCpf(_cpf)).First();
             Assert.NotNull(colaboradorExistente);
 
             // Remover
