@@ -105,6 +105,11 @@
 	  <MauiXaml Update="Views\ConfigPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+		<MauiXaml Update="Views\AlunoListPage.xaml">			
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
 	</ItemGroup>
 
 </Project>

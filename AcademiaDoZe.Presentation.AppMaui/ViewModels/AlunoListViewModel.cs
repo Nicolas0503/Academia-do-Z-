@@ -1,15 +1,14 @@
 ﻿using Academia_do_Zé.Entities;
-using Academia_do_Zé.Entities;
 using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
 {
-    public partial class ColaboradorListViewModel : BaseViewModel
+    public partial class AlunoListViewModel : BaseViewModel
     {
         public ObservableCollection<string> FilterTypes { get; } = new() { "Id", "CPF" };
-        private readonly IColaboradorService _colaboradorService;
+        private readonly IAlunoService _alunoService;
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -22,32 +21,32 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             get => _selectedFilterType;
             set => SetProperty(ref _selectedFilterType, value);
         }
-        private ObservableCollection<ColaboradorDTO> _colaboradores = new();
-        public ObservableCollection<ColaboradorDTO> Colaboradores
+        private ObservableCollection<AlunoDTO> _alunos = new();
+        public ObservableCollection<AlunoDTO> alunos
         {
-            get => _colaboradores;
-            set => SetProperty(ref _colaboradores, value);
+            get => _alunos;
+            set => SetProperty(ref _alunos, value);
         }
-        private ColaboradorDTO? _selectedColaborador;
-        public ColaboradorDTO? SelectedColaborador
+        private AlunoDTO? _selectedAluno;
+        public AlunoDTO? SelectedAluno
         {
-            get => _selectedColaborador;
-            set => SetProperty(ref _selectedColaborador, value);
+            get => _selectedAluno;
+            set => SetProperty(ref _selectedAluno, value);
         }
-        public ColaboradorListViewModel(IColaboradorService colaboradorService)
+        public AlunoListViewModel(IAlunoService AlunoService)
         {
-            _colaboradorService = colaboradorService;
-            Title = "Colaboradores";
+            _alunoService = AlunoService;
+            Title = "alunos";
         }
         // métodos de comando
 
 
         [RelayCommand]
-        private async Task AddColaboradorAsync()
+        private async Task AddAlunoAsync()
         {
             try
             {
-                await Shell.Current.GoToAsync("colaborador");
+                await Shell.Current.GoToAsync("Aluno");
             }
             catch (Exception ex)
             {
@@ -55,13 +54,13 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             }
         }
         [RelayCommand]
-        private async Task EditColaboradorAsync(ColaboradorDTO colaborador)
+        private async Task EditAlunoAsync(AlunoDTO aluno)
         {
             try
             {
-                if (colaborador == null)
+                if (aluno == null)
                     return;
-                await Shell.Current.GoToAsync($"colaborador?Id={colaborador.Id}");
+                await Shell.Current.GoToAsync($"Aluno?Id={aluno.Id}");
             }
             catch (Exception ex)
             {
@@ -72,11 +71,11 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
         private async Task RefreshAsync()
         {
             IsRefreshing = true;
-            await LoadColaboradoresAsync();
+            await LoadAlunosAsync();
         }
 
         [RelayCommand]
-        private async Task SearchColaboradoresAsync()
+        private async Task SearchalunosAsync()
         {
             if (IsBusy)
                 return;
@@ -88,30 +87,30 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
                 await MainThread.InvokeOnMainThreadAsync(() =>
 
                 {
-                    Colaboradores.Clear();
+                    alunos.Clear();
                 });
-                IEnumerable<ColaboradorDTO> resultados = Enumerable.Empty<ColaboradorDTO>();
-                // Busca os colaboradores de acordo com o filtro
+                IEnumerable<AlunoDTO> resultados = Enumerable.Empty<AlunoDTO>();
+                // Busca os alunos de acordo com o filtro
                 if (string.IsNullOrWhiteSpace(SearchText))
 
                 {
-                    resultados = await _colaboradorService.ObterTodosAsync() ?? Enumerable.Empty<ColaboradorDTO>();
+                    resultados = await _alunoService.ObterTodosAsync() ?? Enumerable.Empty<AlunoDTO>();
                 }
                 else if (SelectedFilterType == "Id" && int.TryParse(SearchText, out int id))
                 {
-                    var colaborador = await _colaboradorService.ObterPorIdAsync(id);
+                    var aluno = await _alunoService.ObterPorIdAsync(id);
 
-                    if (colaborador != null)
+                    if (aluno != null)
 
-                        resultados = new[] { colaborador };
+                        resultados = new[] { aluno };
                 }
                 else if (SelectedFilterType == "CPF")
                 {
-                    // ObterPorCpfAsync agora retorna IEnumerable<ColaboradorDTO>
+                    // ObterPorCpfAsync agora retorna IEnumerable<AlunoDTO>
 
-                    var colaboradores = await _colaboradorService.ObterPorCpfAsync(SearchText) ?? Enumerable.Empty<ColaboradorDTO>();
+                    var alunos = await _alunoService.ObterPorCpfAsync(SearchText) ?? Enumerable.Empty<AlunoDTO>();
 
-                    resultados = colaboradores;
+                    resultados = alunos;
                 }
                 // Atualiza a coleção na thread principal
 
@@ -120,14 +119,14 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
                 {
                     foreach (var item in resultados)
                     {
-                        Colaboradores.Add(item);
+                        alunos.Add(item);
                     }
-                    OnPropertyChanged(nameof(Colaboradores));
+                    OnPropertyChanged(nameof(alunos));
                 });
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Erro", $"Erro ao buscar colaboradores: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Erro", $"Erro ao buscar alunos: {ex.Message}", "OK");
             }
             finally
             {
@@ -136,7 +135,7 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
         }
 
         [RelayCommand]
-        private async Task LoadColaboradoresAsync()
+        private async Task LoadAlunosAsync()
         {
             if (IsBusy)
                 return;
@@ -147,28 +146,28 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
                 await MainThread.InvokeOnMainThreadAsync(() =>
 
                 {
-                    Colaboradores.Clear();
-                    OnPropertyChanged(nameof(Colaboradores));
+                    alunos.Clear();
+                    OnPropertyChanged(nameof(alunos));
                 });
-                var colaboradoresList = await _colaboradorService.ObterTodosAsync();
-                if (colaboradoresList != null)
+                var alunosList = await _alunoService.ObterTodosAsync();
+                if (alunosList != null)
                 {
                     // Garantir que a atualização da UI aconteça na thread principal
 
                     await MainThread.InvokeOnMainThreadAsync(() =>
 
                     {
-                        foreach (var colaborador in colaboradoresList)
+                        foreach (var Aluno in alunosList)
                         {
-                            Colaboradores.Add(colaborador);
+                            alunos.Add(Aluno);
                         }
-                        OnPropertyChanged(nameof(Colaboradores));
+                        OnPropertyChanged(nameof(alunos));
                     });
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Erro", $"Erro ao carregar colaboradores: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Erro", $"Erro ao carregar alunos: {ex.Message}", "OK");
             }
             finally
             {
@@ -178,34 +177,34 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
         }
 
         [RelayCommand]
-        private async Task DeleteColaboradorAsync(ColaboradorDTO colaborador)
+        private async Task DeleteAlunoAsync(AlunoDTO Aluno)
         {
-            if (colaborador == null)
+            if (Aluno == null)
                 return;
             bool confirm = await Shell.Current.DisplayAlert(
             "Confirmar Exclusão",
 
-            $"Deseja realmente excluir o colaborador {colaborador.Nome}?",
+            $"Deseja realmente excluir o Aluno {Aluno.Nome}?",
             "Sim", "Não");
             if (!confirm)
                 return;
             try
             {
                 IsBusy = true;
-                bool success = await _colaboradorService.RemoverAsync(colaborador.Id);
+                bool success = await _alunoService.RemoverAsync(Aluno.Id);
                 if (success)
                 {
-                    Colaboradores.Remove(colaborador);
-                    await Shell.Current.DisplayAlert("Sucesso", "Colaborador excluído com sucesso!", "OK");
+                    alunos.Remove(Aluno);
+                    await Shell.Current.DisplayAlert("Sucesso", "Aluno excluído com sucesso!", "OK");
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Erro", "Não foi possível excluir o colaborador.", "OK");
+                    await Shell.Current.DisplayAlert("Erro", "Não foi possível excluir o Aluno.", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Erro", $"Erro ao excluir colaborador: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Erro", $"Erro ao excluir Aluno: {ex.Message}", "OK");
             }
             finally
             {
@@ -213,32 +212,32 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             }
         }
         [RelayCommand]
-        public async Task SearchByCpfAsync(ColaboradorDTO colaborador)
+        public async Task SearchByCpfAsync(AlunoDTO Aluno)
         {
-            if (string.IsNullOrWhiteSpace(colaborador.Cpf))
+            if (string.IsNullOrWhiteSpace(Aluno.Cpf))
                 return;
             try
             {
                 IsBusy = true;
                 // normaliza para apenas dígitos (o repositório espera dígitos)
 
-                var cpfNormalized = new string(colaborador.Cpf.Where(char.IsDigit).ToArray());
+                var cpfNormalized = new string(Aluno.Cpf.Where(char.IsDigit).ToArray());
 
-                var resultados = (await _colaboradorService.ObterPorCpfAsync(cpfNormalized))?.ToList() ?? new List<ColaboradorDTO>();
+                var resultados = (await _alunoService.ObterPorCpfAsync(cpfNormalized))?.ToList() ?? new List<AlunoDTO>();
                 if (!resultados.Any())
                 {
                     await Shell.Current.DisplayAlert("Aviso", "CPF não encontrado.", "OK"); return;
                 }
                 if (resultados.Count == 1)
                 {
-                    colaborador = resultados.First();
-                    await Shell.Current.DisplayAlert("Aviso", "Colaborador já cadastrado! Dados carregados para edição.", "OK"); return;
+                    Aluno = resultados.First();
+                    await Shell.Current.DisplayAlert("Aviso", "Aluno já cadastrado! Dados carregados para edição.", "OK"); return;
                 }
                 // múltiplos resultados -> perguntar ao usuário qual selecionar
 
                 var options = resultados.Select(c => $"{c.Id} - {c.Nome} ({c.Cpf})").ToArray();
 
-                var escolha = await Shell.Current.DisplayActionSheet("Vários colaboradores encontrados", "Cancelar", null, options);
+                var escolha = await Shell.Current.DisplayActionSheet("Vários alunos encontrados", "Cancelar", null, options);
                 if (string.IsNullOrWhiteSpace(escolha) || escolha == "Cancelar")
                     return;
                 // extrai ID a partir da string selecionada ("{Id} - ...")
@@ -251,8 +250,8 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
                     if (selecionado != null)
 
                     {
-                        colaborador = selecionado;
-                        await Shell.Current.DisplayAlert("Aviso", "Colaborador selecionado: dados carregados para edição.", "OK");
+                        Aluno = selecionado;
+                        await Shell.Current.DisplayAlert("Aviso", "Aluno selecionado: dados carregados para edição.", "OK");
                     }
                 }
             }
