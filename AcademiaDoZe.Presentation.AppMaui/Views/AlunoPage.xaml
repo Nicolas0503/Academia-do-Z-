@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.AlunoPage"
+             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+             x:DataType="vm:AlunoViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="10">
+            <Entry Text="{Binding Aluno.Nome}" Placeholder="Nome" />
+            <Entry Text="{Binding Aluno.Cpf}" Placeholder="CPF" />
+            <Entry Text="{Binding Aluno.Telefone}" Placeholder="Telefone" />
+            <Entry Text="{Binding Aluno.Email}" Placeholder="Email" />
+            <DatePicker Date="{Binding Aluno.DataNascimento}" />
+            <Entry Text="{Binding Aluno.Endereco.Cep}" Placeholder="CEP" />
+            <Entry Text="{Binding Aluno.Numero}" Placeholder="Número" />
+            <Button Text="Buscar CEP" Command="{Binding SearchByCepCommand}" />
+            <Button Text="Selecionar Foto" Command="{Binding SelecionarFotoCommand}" />
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Salvar" Command="{Binding SaveAlunoCommand}" Style="{StaticResource ButtonPrimary}" />
+                <Button Text="Cancelar" Command="{Binding CancelCommand}" Style="{StaticResource ButtonSecondary}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
