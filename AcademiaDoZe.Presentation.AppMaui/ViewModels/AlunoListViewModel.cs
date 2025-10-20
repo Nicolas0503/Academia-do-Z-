@@ -46,7 +46,7 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
         {
             try
             {
-                await Shell.Current.GoToAsync("Aluno");
+                await Shell.Current.GoToAsync("aluno");
             }
             catch (Exception ex)
             {
@@ -60,7 +60,7 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels
             {
                 if (aluno == null)
                     return;
-                await Shell.Current.GoToAsync($"Aluno?Id={aluno.Id}");
+                await Shell.Current.GoToAsync($"aluno?Id={aluno.Id}");
             }
             catch (Exception ex)
             {

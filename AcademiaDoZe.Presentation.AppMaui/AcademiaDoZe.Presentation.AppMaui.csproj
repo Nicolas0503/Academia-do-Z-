@@ -78,6 +78,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\AlunoPage.xaml.cs">
+	    <DependentUpon>AlunoPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\LogradouroPage.xaml.cs">
 	    <DependentUpon>LogradouroPage.xaml</DependentUpon>
 	  </Compile>
@@ -88,6 +91,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\ColaboradorListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AlunoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ColaboradorPage.xaml">

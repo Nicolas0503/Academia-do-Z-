@@ -14,7 +14,7 @@ public partial class AlunoListPage : ContentPage
         base.OnAppearing();
         if (BindingContext is AlunoListViewModel viewModel)
         {
-            await viewModel.LoadAlunoesCommand.ExecuteAsync(null);
+            await viewModel.LoadAlunosCommand.ExecuteAsync(null);
         }
     }
     private async void OnEditButtonClicked(object sender, EventArgs e)
@@ -58,7 +58,7 @@ public partial class AlunoListPage : ContentPage
             if (token.IsCancellationRequested) return;
             if (BindingContext is AlunoListViewModel vm)
             {
-                await vm.SearchAlunoesCommand.ExecuteAsync(null);
+                await vm.SearchalunosCommand.ExecuteAsync(null);
             }
         }
         catch (TaskCanceledException) { /* ignorar */ }

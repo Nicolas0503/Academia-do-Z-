@@ -115,7 +115,7 @@ VerticalOptions="Center"/>
         <Grid Grid.Row="1">
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <!-- mostra os dados dos alunoes -->
-                <CollectionView ItemsSource="{Binding Alunoes}" SelectionMode="None" Margin="10">
+                <CollectionView ItemsSource="{Binding alunos}" SelectionMode="None" Margin="10">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical">
                             

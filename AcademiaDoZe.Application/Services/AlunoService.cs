@@ -19,7 +19,7 @@ namespace AcademiaDoZe.Application.Services
         public async Task<AlunoDTO> AdicionarAsync(AlunoDTO alunoDto)
         {
             // Exemplo: validação de CPF único (ajuste conforme sua regra de negócio)
-            var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
+            var cpfExistente = (await _repoFactory().ObterPorCpf(alunoDto.Cpf)).FirstOrDefault();
             if (cpfExistente != null)
             {
                 throw new InvalidOperationException($"Aluno com ID {cpfExistente.Id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
@@ -36,7 +36,7 @@ namespace AcademiaDoZe.Application.Services
             // Exemplo: validação de CPF único ao atualizar
             if (!string.Equals(alunoExistente.Cpf, alunoDto.Cpf, StringComparison.OrdinalIgnoreCase))
             {
-                var cpfExistente = await _repoFactory().ObterPorCpf(alunoDto.Cpf);
+                var cpfExistente = (await _repoFactory().ObterPorCpf(alunoDto.Cpf)).FirstOrDefault();
                 if (cpfExistente != null && cpfExistente.Id != alunoDto.Id)
                 {
                     throw new InvalidOperationException($"Aluno com ID {cpfExistente.Id}, já cadastrado com o CPF {cpfExistente.Cpf}.");
@@ -46,13 +46,6 @@ namespace AcademiaDoZe.Application.Services
             await _repoFactory().Atualizar(alunoAtualizado);
             return alunoAtualizado.ToDto();
         }
-
-        public async Task<AlunoDTO> ObterPorCpfAsync(string cpf)
-        {
-            var aluno = await _repoFactory().ObterPorCpf(cpf);
-            return aluno != null ? aluno.ToDto() : null!;
-        }
-
 
         public async Task<AlunoDTO> ObterPorIdAsync(int id)
         {
@@ -75,6 +68,12 @@ namespace AcademiaDoZe.Application.Services
             }
             await _repoFactory().Remover(id);
             return true;
+        }
+
+        public async Task<IEnumerable<AlunoDTO>> ObterPorCpfAsync(string cpf)
+        {
+            var alunos = await _repoFactory().ObterPorCpf(cpf);
+            return alunos.Select(a => a.ToDto());
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Academia_do_Zé.Repositories
     {
         // Métodos específicos do domínio
 
-        Task<Aluno?> ObterPorCpf(string cpf);
+        Task<IEnumerable<Aluno>> ObterPorCpf(string cpf);
 
         Task<Aluno?> ObterPorEmail(string email);
     }
